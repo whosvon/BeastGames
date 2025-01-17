@@ -1,0 +1,29 @@
+local player = game.Players.LocalPlayer
+local workspace = game:GetService("Workspace")
+local ticketsFolder = workspace:WaitForChild("Tickets")
+
+local function teleportToRandomPrompt()
+    local prompts = {}
+
+    for _, item in ipairs(ticketsFolder:GetChildren()) do
+        local proximityPrompt = item:FindFirstChildWhichIsA("ProximityPrompt")
+        if proximityPrompt then
+            table.insert(prompts, proximityPrompt)
+        end
+    end
+
+    if #prompts > 0 then
+        local randomPrompt = prompts[math.random(1, #prompts)]
+        local parentPart = randomPrompt.Parent
+        if parentPart:IsA("BasePart") then
+            player.Character:SetPrimaryPartCFrame(parentPart.CFrame)
+            fireproximityprompt(randomPrompt)
+        else
+            warn("Parent of ProximityPrompt is not a BasePart:", randomPrompt.Name)
+        end
+    else
+        warn("No ProximityPrompts found in the folder.")
+    end
+end
+
+teleportToRandomPrompt()
